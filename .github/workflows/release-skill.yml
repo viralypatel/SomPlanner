@@ -1,0 +1,32 @@
+# Builds somtoday-study-plan.zip and publishes it as the latest release,
+# so parents can download it from:
+# https://github.com/<owner>/<repo>/releases/latest/download/somtoday-study-plan.zip
+name: Release skill zip
+
+on:
+  push:
+    branches: [main]
+    paths: ['skills/**']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Zip the skill
+        run: cd skills && zip -r ../somtoday-study-plan.zip somtoday-study-plan
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="v$(date -u +%Y.%m.%d)-${GITHUB_SHA::7}"
+          gh release create "$TAG" somtoday-study-plan.zip \
+            --title "SomPlanner $(date -u +%d-%m-%Y)" \
+            --notes "Download **somtoday-study-plan.zip** and upload it in claude.ai → Settings → Capabilities → Skills. See USAGE.md." \
+            --latest

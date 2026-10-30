@@ -1,0 +1,17 @@
+# Personal data – never commit
+config.local.json
+plans/
+idea/
+
+# Locally installed third-party skills (install them yourself, see README)
+.agents/
+skills-lock.json
+.claude/*
+!.claude/skills/
+.claude/skills/*
+!.claude/skills/somtoday-study-plan
+
+# Build output and OS files
+*.zip
+.DS_Store
+Thumbs.db
